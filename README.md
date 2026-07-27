@@ -13,3 +13,7 @@ This study uses data from 507 active individuals to investigate the relationship
 - `Analysis.qmd`: Contains the written analysis, code, and results
 - `analysis_functions.R`: Imports and prepares the dataset
 - `data/body.dat.txt`: Contains the body dimensions dataset
+
+## Analysis Output
+
+The completed analysis is available in `Analysis.html`.
