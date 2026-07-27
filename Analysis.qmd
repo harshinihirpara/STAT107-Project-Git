@@ -1,0 +1,92 @@
+---
+title: "Waist Circumference and Body Weight"
+author: "Harshini Hirpara"
+format: html
+editor: visual
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+source("analysis_functions.R")
+body_data <- read_body_data("data/body.dat.txt")
+```
+
+# Introduction
+
+This project examines a body dimensions dataset containing measurements from 507 active individuals. The dataset includes waist circumference, body weight, height, gender, and other body measurements. This project focuses on the following question. **Does the relationship between waist circumference and body weight differ between men and women?** I expect waist circumference and body weight to have a positive relationship for both groups. However, the strength of this relationship may differ between men and women.
+
+Weight and total body size are frequently correlated with waist circumference. However, because body composition patterns might change across the sexes, this link can be different for men and women.
+
+## Hypotheses
+
+**Null Hypothesis:** The relationship between waist circumference and body weight is the same for males and females.
+
+$$H_0: \beta_{\text{waist} \times \text{gender}} = 0$$
+
+**Alternative Hypothesis:** The relationship between waist circumference and body weight differs between males and females.
+
+$$H_A: \beta_{\text{waist} \times \text{gender}} \neq 0$$
+
+## Data Description
+
+The dataset contains 507 observations and 25 variables. These include 260 female participants and 247 male participants. This analysis focuses on body weight, waist circumference, and gender. The remaining variables are not included because they are not necessary to answer the research question. However, height, age, and other body measurements may also be associated with waist circumference and body weight. Not including these variables is a limitation of this analysis. *No observations were removed from the variables used in this analysis.*
+
+```{r}
+mean(body_data$weight)
+sd(body_data$weight)
+```
+
+*The mean body weight of the participants was 69.15 kilograms, with a standard deviation of 13.35 kilograms.*
+
+## Variable Description
+
+| Variable | Description | Type |
+|------------------------|------------------------|------------------------|
+| Body weight | The participant’s body weight measured in kilograms | Numerical |
+| Waist circumference | The participant’s waist circumference measured in centimeters | Numerical |
+| Gender | The participant’s gender categorized as female or male | Categorical |
+
+# Methods
+
+I used a multiple linear regression model including gender and an interaction term to investigate the relationship between waist circumference and body weight. The interaction term tests whether this relationship differs between men and women. The model was created in R using the `lm()` function. The assumptions examined were linearity, normally distributed residuals, constant variance, and independence of observations.
+
+```{r}
+body_model <- lm(weight ~ waist_girth * gender, data = body_data)
+summary(body_model)
+```
+
+# Results
+
+Waist circumference had a positive relationship with body weight for both sexes. The interaction between waist circumference and gender had a coefficient of -0.123, a standard error of 0.062, and a p-value of 0.0458. Since the p-value was below 0.05, the null hypothesis was rejected, indicating that the relationship between waist circumference and body weight differs between the two sexes. For each one-centimeter increase in waist circumference, predicted body weight increased by approximately 1.09 kilograms for females and 0.96 kilograms for males.
+
+```{r}
+ggplot(body_data, aes(x = waist_girth, y = weight, color = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    x = "Waist Circumference (cm)",
+    y = "Body Weight (kg)",
+    color = "Gender"
+  )
+```
+
+*The positive association between waist size and body weight for both male and female subjects can be seen from the graph above. The slope of the regression line for females is greater than the slope of the regression line for males.*
+
+# Discussion
+
+The results support my initial hypothesis. Waist circumference and body weight were positively related in both males and females. The study also found a small difference in how the two variables were related between the sexes, as the slope of the regression line for females was slightly higher than the slope for males.
+
+This study only considered waist circumference, body weight, and gender. There are other variables in the data set, such as height, age, and other body measurements, that may be related to waist circumference and body weight. Because these variables were not considered, the findings only suggest an association and cannot be used to conclude causation. The study also used data from active individuals, so the findings may not apply to the general population.
+
+```{r}
+par(mfrow = c(1, 2))
+plot(body_model, which = 1)
+plot(body_model, which = 2)
+par(mfrow = c(1, 1))
+```
+
+The residuals were mostly centered around zero, with a slight pattern at higher fitted values. The Q-Q plot generally followed the reference line. Overall, the model assumptions appeared reasonably satisfied.
