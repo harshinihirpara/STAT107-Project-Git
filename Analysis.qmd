@@ -83,16 +83,9 @@ The average weight and waist circumference of the participants were 69.15 kilogr
 
 # Methods
 
-The main regression analysis only considered waist circumference, body weight, and gender . The interaction term tests whether this relationship differs between men and women. The assumptions examined were linearity, normally distributed residuals, constant variance, and independence of observations.
-
-```{r}
-body_model <- lm(weight ~ waist_girth * gender, data = body_data)
-summary(body_model)
-```
+The main regression analysis only considered waist circumference, body weight, and gender. The interaction term tests whether this relationship differs between men and women. The assumptions examined were linearity, normally distributed residuals, constant variance, and independence of observations.
 
 # Results
-
-Waist circumference had a positive relationship with body weight for both sexes. The interaction between waist circumference and gender had a coefficient of -0.123, a standard error of 0.062, and a p-value of 0.0458. Since the p-value was below 0.05, the null hypothesis was rejected, indicating that the relationship between waist circumference and body weight differs between the two sexes. For each one-centimeter increase in waist circumference, predicted body weight increased by approximately 1.09 kilograms for females and 0.96 kilograms for males.
 
 ```{r}
 ggplot(body_data, aes(x = waist_girth, y = weight, color = gender)) +
@@ -113,6 +106,13 @@ summary(baseline_model)
 ```
 
 *After controlling for waist circumference, males were predicted to have 2.55 kilograms greater weight compared to females with equal waist circumference. This difference was statistically significant (*$p = 0.000174$*). Waist circumference was also a statistically significant predictor of weight (*$p < 2 \times 10^{-16}$*). For each additional centimeter increase in waist circumference, the weight was predicted to be approximately 1.02 kilograms greater. The adjusted* $R^2$ *was 0.8215, meaning that the baseline model explained approximately 82.15% of the variation in weight.*
+
+```{r}
+body_model <- lm(weight ~ waist_girth * gender, data = body_data)
+summary(body_model)
+```
+
+Waist circumference had a positive correlation with body weight for both genders. Interaction of waist circumference and gender had a coefficient value of -0.123, a standard error value of 0.062, and a p-value of 0.0458. As the p-value was less than 0.05, the null hypothesis was rejected, implying that there is a difference in the correlation between waist circumference and body weight for the two genders. For a one-centimeter increase in waist circumference, the body weight predicted increased by 1.09 kg for women and 0.96 kg for men.
 
 ```{r}
 summary(baseline_model)$adj.r.squared
