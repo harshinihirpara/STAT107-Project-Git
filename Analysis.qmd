@@ -23,24 +23,55 @@ Weight and total body size are frequently correlated with waist circumference. H
 
 ## Hypotheses
 
-**Null Hypothesis:** The relationship between waist circumference and body weight is the same for males and females.
+The following regression model was used to investigate if there are gender differences in the relationship between waist circumference and weight:
 
-$$H_0: \beta_{\text{waist} \times \text{gender}} = 0$$
+$$\text{Weight}_i = \beta_0 + \beta_1(\text{Waist}_i) + \beta_2(\text{Male}_i) + \beta_3(\text{Waist}_i \times \text{Male}_i) + \epsilon_i$$
 
-**Alternative Hypothesis:** The relationship between waist circumference and body weight differs between males and females.
+The intercept in this model is represented by $\beta_0$, the association between female waist circumference and weight by $\beta_1$, and the difference between **males and females** when waist circumference is **held** constant by $\beta_2$. The difference between the male and female slopes is represented by the interaction coefficient, $\beta_3$. To determine whether the relationship between waist circumference and weight differs by gender, the interaction coefficient is tested.
 
-$$H_A: \beta_{\text{waist} \times \text{gender}} \neq 0$$
+**Null Hypothesis**:
+
+$$H_0: \beta_3 = 0$$
+
+The relationship between waist circumference and weight does not differ between males and females.
+
+**Alternative Hypothesis**
+
+$$H_A: \beta_3 \neq 0$$
+
+The relationship between waist circumference and weight differs between males and females.
 
 ## Data Description
 
 The dataset contains 507 observations and 25 variables. These include 260 female participants and 247 male participants. This analysis focuses on body weight, waist circumference, and gender. The remaining variables are not included because they are not necessary to answer the research question. However, height, age, and other body measurements may also be associated with waist circumference and body weight. Not including these variables is a limitation of this analysis. *No observations were removed from the variables used in this analysis.*
 
 ```{r}
-mean(body_data$weight)
-sd(body_data$weight)
+overall_summary <- body_data |>
+  summarize(
+    Group = "Overall",
+    n = n(),
+    weight_mean = round(mean(weight), 2),
+    weight_sd = round(sd(weight), 2),
+    waist_mean = round(mean(waist_girth), 2),
+    waist_sd = round(sd(waist_girth), 2)
+  )
+
+gender_summary <- body_data |>
+  group_by(gender) |>
+  summarize(
+    n = n(),
+    weight_mean = round(mean(weight), 2),
+    weight_sd = round(sd(weight), 2),
+    waist_mean = round(mean(waist_girth), 2),
+    waist_sd = round(sd(waist_girth), 2)
+  ) |>
+  rename(Group = gender)
+
+summary_table <- bind_rows(overall_summary, gender_summary)
+summary_table
 ```
 
-*The mean body weight of the participants was 69.15 kilograms, with a standard deviation of 13.35 kilograms.*
+The average weight and waist circumference of the participants were 69.15 kilograms and 76.98 centimeters, respectively. Males had a higher average weight and waist circumference than females. The average weight was 78.14 kilograms for males and 60.60 kilograms for females, while the average waist circumference was 84.53 centimeters for males and 69.80 centimeters for females. These differences motivate further examination of whether the relationship between waist circumference and weight also differs between the two groups.
 
 ## Variable Description
 
@@ -52,7 +83,7 @@ sd(body_data$weight)
 
 # Methods
 
-I used a multiple linear regression model including gender and an interaction term to investigate the relationship between waist circumference and body weight. The interaction term tests whether this relationship differs between men and women. The model was created in R using the `lm()` function. The assumptions examined were linearity, normally distributed residuals, constant variance, and independence of observations.
+The main regression analysis only considered waist circumference, body weight, and gender . The interaction term tests whether this relationship differs between men and women. The assumptions examined were linearity, normally distributed residuals, constant variance, and independence of observations.
 
 ```{r}
 body_model <- lm(weight ~ waist_girth * gender, data = body_data)
@@ -74,11 +105,38 @@ ggplot(body_data, aes(x = waist_girth, y = weight, color = gender)) +
   )
 ```
 
-*The positive association between waist size and body weight for both male and female subjects can be seen from the graph above. The slope of the regression line for females is greater than the slope of the regression line for males.*
+*For men and women, the scatterplot demonstrates a positive relationship between waist circumference and weight. Participants with bigger waist circumferences often weighed more. The fitted lines seem to have somewhat varied slopes, indicating that men and women may have different relationships between waist circumference* *and weight. This visual pattern motivates testing the interaction between waist circumference and gender.*
+
+```{r}
+baseline_model <- lm(weight ~ waist_girth + gender, data = body_data)
+summary(baseline_model)
+```
+
+*After controlling for waist circumference, males were predicted to have 2.55 kilograms greater weight compared to females with equal waist circumference. This difference was statistically significant (*$p = 0.000174$*). Waist circumference was also a statistically significant predictor of weight (*$p < 2 \times 10^{-16}$*). For each additional centimeter increase in waist circumference, the weight was predicted to be approximately 1.02 kilograms greater. The adjusted* $R^2$ *was 0.8215, meaning that the baseline model explained approximately 82.15% of the variation in weight.*
+
+```{r}
+summary(baseline_model)$adj.r.squared
+summary(body_model)$adj.r.squared
+anova(baseline_model, body_model)
+```
+
+*The adjusted* $R^2$ *improved marginally from 0.8215 in the baseline regression to 0.8226 in the interaction regression. That is, inclusion of the interaction in the model led to only a marginal improvement in the amount of variation in weight accounted for by the model. The ANOVA test gave a p-value of 0.04583, meaning that there was a statistically significant improvement in the fit of the model with the inclusion of the interaction effect at the 0.05 level of significance. Nonetheless, because of the marginal increase in the adjusted* $R^2$ *and the p-value being close to 0.05, the results should be interpreted with caution.*
+
+```{r}
+ggplot(body_data, aes(x = height, y = weight)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    x = "Height (cm)",
+    y = "Body Weight (kg)"
+  )
+```
+
+*Height and weight have a direct correlation implying that apart from waist circumference, other body measurements could be considered when explaining differences in weight. The current study takes into account only waist circumference as an objective measure of one’s body.*
 
 # Discussion
 
-The results support my initial hypothesis. Waist circumference and body weight were positively related in both males and females. The study also found a small difference in how the two variables were related between the sexes, as the slope of the regression line for females was slightly higher than the slope for males.
+The results provide limited evidence supporting my initial hypothesis. Waist circumference and body weight were positively related in both males and females. The study also found a small difference in how the two variables were related between the sexes, as the slope of the regression line for females was slightly higher than the slope for males.
 
 This study only considered waist circumference, body weight, and gender. There are other variables in the data set, such as height, age, and other body measurements, that may be related to waist circumference and body weight. Because these variables were not considered, the findings only suggest an association and cannot be used to conclude causation. The study also used data from active individuals, so the findings may not apply to the general population.
 
@@ -89,4 +147,4 @@ plot(body_model, which = 2)
 par(mfrow = c(1, 1))
 ```
 
-The residuals were mostly centered around zero, with a slight pattern at higher fitted values. The Q-Q plot generally followed the reference line. Overall, the model assumptions appeared reasonably satisfied.
+The residuals were mostly centered around zero, with a slight pattern at higher fitted values. The Q-Q plot generally followed the reference line. Overall, the model assumptions appeared reasonably satisfied. The independence assumption is reasonable because each row in the data set represents a different participant.

@@ -108,23 +108,28 @@ window.Quarto = {
 <p>Weight and total body size are frequently correlated with waist circumference. However, because body composition patterns might change across the sexes, this link can be different for men and women.</p>
 <section id="hypotheses" class="level2">
 <h2 class="anchored" data-anchor-id="hypotheses">Hypotheses</h2>
-<p><strong>Null Hypothesis:</strong> The relationship between waist circumference and body weight is the same for males and females.</p>
-<p><span class="math display">\[H_0: \beta_{\text{waist} \times \text{gender}} = 0\]</span></p>
-<p><strong>Alternative Hypothesis:</strong> The relationship between waist circumference and body weight differs between males and females.</p>
-<p><span class="math display">\[H_A: \beta_{\text{waist} \times \text{gender}} \neq 0\]</span></p>
+<p>The following regression model was used to investigate if there are gender differences in the relationship between waist circumference and weight:</p>
+<p><span class="math display">\[\text{Weight}_i = \beta_0 + \beta_1(\text{Waist}_i) + \beta_2(\text{Male}_i) + \beta_3(\text{Waist}_i \times \text{Male}_i) + \epsilon_i\]</span></p>
+<p>The intercept in this model is represented by <span class="math inline">\(\beta_0\)</span>, the association between female waist circumference and weight by <span class="math inline">\(\beta_1\)</span>, and the difference between <strong>males and females</strong> when waist circumference is <strong>held</strong> constant by <span class="math inline">\(\beta_2\)</span>. The difference between the male and female slopes is represented by the interaction coefficient, <span class="math inline">\(\beta_3\)</span>. To determine whether the relationship between waist circumference and weight differs by gender, the interaction coefficient is tested.</p>
+<p><strong>Null Hypothesis</strong>:</p>
+<p><span class="math display">\[H_0: \beta_3 = 0\]</span></p>
+<p>The relationship between waist circumference and weight does not differ between males and females.</p>
+<p><strong>Alternative Hypothesis</strong></p>
+<p><span class="math display">\[H_A: \beta_3 \neq 0\]</span></p>
+<p>The relationship between waist circumference and weight differs between males and females.</p>
 </section>
 <section id="data-description" class="level2">
 <h2 class="anchored" data-anchor-id="data-description">Data Description</h2>
 <p>The dataset contains 507 observations and 25 variables. These include 260 female participants and 247 male participants. This analysis focuses on body weight, waist circumference, and gender. The remaining variables are not included because they are not necessary to answer the research question. However, height, age, and other body measurements may also be associated with waist circumference and body weight. Not including these variables is a limitation of this analysis. <em>No observations were removed from the variables used in this analysis.</em></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 69.14753</code></pre>
+<pre><code>    Group   n weight_mean weight_sd waist_mean waist_sd
+1 Overall 507       69.15     13.35      76.98    11.01
+2  Female 260       60.60      9.62      69.80     7.59
+3    Male 247       78.14     10.51      84.53     8.78</code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 13.34576</code></pre>
 </div>
-</div>
-<p><em>The mean body weight of the participants was 69.15 kilograms, with a standard deviation of 13.35 kilograms.</em></p>
+<p>The average weight and waist circumference of the participants were 69.15 kilograms and 76.98 centimeters, respectively. Males had a higher average weight and waist circumference than females. The average weight was 78.14 kilograms for males and 60.60 kilograms for females, while the average waist circumference was 84.53 centimeters for males and 69.80 centimeters for females. These differences motivate further examination of whether the relationship between waist circumference and weight also differs between the two groups.</p>
 </section>
 <section id="variable-description" class="level2">
 <h2 class="anchored" data-anchor-id="variable-description">Variable Description</h2>
@@ -163,7 +168,7 @@ window.Quarto = {
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
-<p>I used a multiple linear regression model including gender and an interaction term to investigate the relationship between waist circumference and body weight. The interaction term tests whether this relationship differs between men and women. The model was created in R using the <code>lm()</code> function. The assumptions examined were linearity, normally distributed residuals, constant variance, and independence of observations.</p>
+<p>The main regression analysis only considered waist circumference, body weight, and gender . The interaction term tests whether this relationship differs between men and women. The assumptions examined were linearity, normally distributed residuals, constant variance, and independence of observations.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -201,22 +206,76 @@ F-statistic: 783.1 on 3 and 503 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </div>
-<p><em>The positive association between waist size and body weight for both male and female subjects can be seen from the graph above. The slope of the regression line for females is greater than the slope of the regression line for males.</em></p>
+<p><em>For men and women, the scatterplot demonstrates a positive relationship between waist circumference and weight. Participants with bigger waist circumferences often weighed more. The fitted lines seem to have somewhat varied slopes, indicating that men and women may have different relationships between waist circumference</em> <em>and weight. This visual pattern motivates testing the interaction between waist circumference and gender.</em></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ waist_girth + gender, data = body_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.7406  -3.6998  -0.1216   3.4890  19.1895 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -10.45927    2.16631  -4.828 1.83e-06 ***
+waist_girth   1.01800    0.03063  33.238  &lt; 2e-16 ***
+genderMale    2.54933    0.67414   3.782 0.000174 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.638 on 504 degrees of freedom
+Multiple R-squared:  0.8222,    Adjusted R-squared:  0.8215 
+F-statistic:  1166 on 2 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><em>After controlling for waist circumference, males were predicted to have 2.55 kilograms greater weight compared to females with equal waist circumference. This difference was statistically significant (</em><span class="math inline">\(p = 0.000174\)</span><em>). Waist circumference was also a statistically significant predictor of weight (</em><span class="math inline">\(p &lt; 2 \times 10^{-16}\)</span><em>). For each additional centimeter increase in waist circumference, the weight was predicted to be approximately 1.02 kilograms greater. The adjusted</em> <span class="math inline">\(R^2\)</span> <em>was 0.8215, meaning that the baseline model explained approximately 82.15% of the variation in weight.</em></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8215377</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8225964</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: weight ~ waist_girth + gender
+Model 2: weight ~ waist_girth * gender
+  Res.Df   RSS Df Sum of Sq      F  Pr(&gt;F)  
+1    504 16020                              
+2    503 15893  1    126.64 4.0078 0.04583 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><em>The adjusted</em> <span class="math inline">\(R^2\)</span> <em>improved marginally from 0.8215 in the baseline regression to 0.8226 in the interaction regression. That is, inclusion of the interaction in the model led to only a marginal improvement in the amount of variation in weight accounted for by the model. The ANOVA test gave a p-value of 0.04583, meaning that there was a statistically significant improvement in the fit of the model with the inclusion of the interaction effect at the 0.05 level of significance. Nonetheless, because of the marginal increase in the adjusted</em> <span class="math inline">\(R^2\)</span> <em>and the p-value being close to 0.05, the results should be interpreted with caution.</em></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><em>Height and weight have a direct correlation implying that apart from waist circumference, other body measurements could be considered when explaining differences in weight. The current study takes into account only waist circumference as an objective measure of one’s body.</em></p>
 </section>
 <section id="discussion" class="level1">
 <h1>Discussion</h1>
-<p>The results support my initial hypothesis. Waist circumference and body weight were positively related in both males and females. The study also found a small difference in how the two variables were related between the sexes, as the slope of the regression line for females was slightly higher than the slope for males.</p>
+<p>The results provide limited evidence supporting my initial hypothesis. Waist circumference and body weight were positively related in both males and females. The study also found a small difference in how the two variables were related between the sexes, as the slope of the regression line for females was slightly higher than the slope for males.</p>
 <p>This study only considered waist circumference, body weight, and gender. There are other variables in the data set, such as height, age, and other body measurements, that may be related to waist circumference and body weight. Because these variables were not considered, the findings only suggest an association and cannot be used to conclude causation. The study also used data from active individuals, so the findings may not apply to the general population.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The residuals were mostly centered around zero, with a slight pattern at higher fitted values. The Q-Q plot generally followed the reference line. Overall, the model assumptions appeared reasonably satisfied.</p>
+<p>The residuals were mostly centered around zero, with a slight pattern at higher fitted values. The Q-Q plot generally followed the reference line. Overall, the model assumptions appeared reasonably satisfied. The independence assumption is reasonable because each row in the data set represents a different participant.</p>
 </section>
 
 </main>
