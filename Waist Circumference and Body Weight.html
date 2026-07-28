@@ -120,7 +120,7 @@ window.Quarto = {
 </section>
 <section id="data-description" class="level2">
 <h2 class="anchored" data-anchor-id="data-description">Data Description</h2>
-<p>The dataset contains 507 observations and 25 variables. These include 260 female participants and 247 male participants. This analysis focuses on body weight, waist circumference, and gender. The remaining variables are not included because they are not necessary to answer the research question. However, height, age, and other body measurements may also be associated with waist circumference and body weight. Not including these variables is a limitation of this analysis. <em>No observations were removed from the variables used in this analysis.</em></p>
+<p>The dataset contains 507 observations and 25 variables. These include 260 female participants and 247 male participants. This analysis focuses on body weight, waist circumference, and gender. The remaining variables are not included because they are not necessary to answer the research question. However, height, age, and other body measurements may also be associated with waist circumference and body weight. Not including these variables is a limitation of this analysis. No observations were removed from the variables used in this analysis.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>    Group   n weight_mean weight_sd waist_mean waist_sd
@@ -181,7 +181,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p><em>For men and women, the scatterplot demonstrates a positive relationship between waist circumference and weight. Participants with bigger waist circumferences often weighed more. The fitted lines seem to have somewhat varied slopes, indicating that men and women may have different relationships between waist circumference</em> <em>and weight. This visual pattern motivates testing the interaction between waist circumference and gender.</em></p>
+<p>For men and women, the scatterplot demonstrates a positive relationship between waist circumference and weight. Participants with bigger waist circumferences often weighed more. The fitted lines seem to have somewhat varied slopes, indicating that men and women may have different relationships between waist circumference and weight. This visual pattern motivates testing the interaction between waist circumference and gender.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -205,7 +205,7 @@ Multiple R-squared:  0.8222,    Adjusted R-squared:  0.8215
 F-statistic:  1166 on 2 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p><em>After controlling for waist circumference, males were predicted to have 2.55 kilograms greater weight compared to females with equal waist circumference. This difference was statistically significant (</em><span class="math inline">\(p = 0.000174\)</span><em>). Waist circumference was also a statistically significant predictor of weight (</em><span class="math inline">\(p &lt; 2 \times 10^{-16}\)</span><em>). For each additional centimeter increase in waist circumference, the weight was predicted to be approximately 1.02 kilograms greater. The adjusted</em> <span class="math inline">\(R^2\)</span> <em>was 0.8215, meaning that the baseline model explained approximately 82.15% of the variation in weight.</em></p>
+<p>After controlling for waist circumference, males were predicted to have 2.55 kilograms greater weight compared to females with equal waist circumference. This difference was statistically significant (<span class="math inline">\(p = 0.000174\)</span>). Waist circumference was also a statistically significant predictor of weight (<span class="math inline">\(p &lt; 2 \times 10^{-16}\)</span>). For each additional centimeter increase in waist circumference, the weight was predicted to be approximately 1.02 kilograms greater. The adjusted <span class="math inline">\(R^2\)</span> was 0.8215, meaning that the baseline model explained approximately 82.15% of the variation in weight.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -250,7 +250,7 @@ Model 2: weight ~ waist_girth * gender
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p><em>The adjusted</em> <span class="math inline">\(R^2\)</span> <em>improved marginally from 0.8215 in the baseline regression to 0.8226 in the interaction regression. That is, inclusion of the interaction in the model led to only a marginal improvement in the amount of variation in weight accounted for by the model. The ANOVA test gave a p-value of 0.04583, meaning that there was a statistically significant improvement in the fit of the model with the inclusion of the interaction effect at the 0.05 level of significance. Nonetheless, because of the marginal increase in the adjusted</em> <span class="math inline">\(R^2\)</span> <em>and the p-value being close to 0.05, the results should be interpreted with caution.</em></p>
+<p>The adjusted <span class="math inline">\(R^2\)</span> improved marginally from 0.8215 in the baseline regression to 0.8226 in the interaction regression. That is, inclusion of the interaction in the model led to only a marginal improvement in the amount of variation in weight accounted for by the model. The ANOVA test gave a p-value of 0.04583, meaning that there was a statistically significant improvement in the fit of the model with the inclusion of the interaction effect at the 0.05 level of significance. Nonetheless, because of the marginal increase in the adjusted <span class="math inline">\(R^2\)</span> and the p-value being close to 0.05, the results should be interpreted with caution.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -260,7 +260,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </div>
-<p><em>Height and weight have a direct correlation implying that apart from waist circumference, other body measurements could be considered when explaining differences in weight. The current study takes into account only waist circumference as an objective measure of one’s body.</em></p>
+<p>Height and weight have a direct correlation implying that apart from waist circumference, other body measurements could be considered when explaining differences in weight. The current study takes into account only waist circumference as an objective measure of one’s body.</p>
 </section>
 <section id="discussion" class="level1">
 <h1>Discussion</h1>

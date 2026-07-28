@@ -43,7 +43,7 @@ The relationship between waist circumference and weight differs between males an
 
 ## Data Description
 
-The dataset contains 507 observations and 25 variables. These include 260 female participants and 247 male participants. This analysis focuses on body weight, waist circumference, and gender. The remaining variables are not included because they are not necessary to answer the research question. However, height, age, and other body measurements may also be associated with waist circumference and body weight. Not including these variables is a limitation of this analysis. *No observations were removed from the variables used in this analysis.*
+The dataset contains 507 observations and 25 variables. These include 260 female participants and 247 male participants. This analysis focuses on body weight, waist circumference, and gender. The remaining variables are not included because they are not necessary to answer the research question. However, height, age, and other body measurements may also be associated with waist circumference and body weight. Not including these variables is a limitation of this analysis. No observations were removed from the variables used in this analysis.
 
 ```{r}
 overall_summary <- body_data |>
@@ -98,14 +98,14 @@ ggplot(body_data, aes(x = waist_girth, y = weight, color = gender)) +
   )
 ```
 
-*For men and women, the scatterplot demonstrates a positive relationship between waist circumference and weight. Participants with bigger waist circumferences often weighed more. The fitted lines seem to have somewhat varied slopes, indicating that men and women may have different relationships between waist circumference* *and weight. This visual pattern motivates testing the interaction between waist circumference and gender.*
+For men and women, the scatterplot demonstrates a positive relationship between waist circumference and weight. Participants with bigger waist circumferences often weighed more. The fitted lines seem to have somewhat varied slopes, indicating that men and women may have different relationships between waist circumference and weight. This visual pattern motivates testing the interaction between waist circumference and gender.
 
 ```{r}
 baseline_model <- lm(weight ~ waist_girth + gender, data = body_data)
 summary(baseline_model)
 ```
 
-*After controlling for waist circumference, males were predicted to have 2.55 kilograms greater weight compared to females with equal waist circumference. This difference was statistically significant (*$p = 0.000174$*). Waist circumference was also a statistically significant predictor of weight (*$p < 2 \times 10^{-16}$*). For each additional centimeter increase in waist circumference, the weight was predicted to be approximately 1.02 kilograms greater. The adjusted* $R^2$ *was 0.8215, meaning that the baseline model explained approximately 82.15% of the variation in weight.*
+After controlling for waist circumference, males were predicted to have 2.55 kilograms greater weight compared to females with equal waist circumference. This difference was statistically significant ($p = 0.000174$). Waist circumference was also a statistically significant predictor of weight ($p < 2 \times 10^{-16}$). For each additional centimeter increase in waist circumference, the weight was predicted to be approximately 1.02 kilograms greater. The adjusted $R^2$ was 0.8215, meaning that the baseline model explained approximately 82.15% of the variation in weight.
 
 ```{r}
 body_model <- lm(weight ~ waist_girth * gender, data = body_data)
@@ -120,7 +120,7 @@ summary(body_model)$adj.r.squared
 anova(baseline_model, body_model)
 ```
 
-*The adjusted* $R^2$ *improved marginally from 0.8215 in the baseline regression to 0.8226 in the interaction regression. That is, inclusion of the interaction in the model led to only a marginal improvement in the amount of variation in weight accounted for by the model. The ANOVA test gave a p-value of 0.04583, meaning that there was a statistically significant improvement in the fit of the model with the inclusion of the interaction effect at the 0.05 level of significance. Nonetheless, because of the marginal increase in the adjusted* $R^2$ *and the p-value being close to 0.05, the results should be interpreted with caution.*
+The adjusted $R^2$ improved marginally from 0.8215 in the baseline regression to 0.8226 in the interaction regression. That is, inclusion of the interaction in the model led to only a marginal improvement in the amount of variation in weight accounted for by the model. The ANOVA test gave a p-value of 0.04583, meaning that there was a statistically significant improvement in the fit of the model with the inclusion of the interaction effect at the 0.05 level of significance. Nonetheless, because of the marginal increase in the adjusted $R^2$ and the p-value being close to 0.05, the results should be interpreted with caution.
 
 ```{r}
 ggplot(body_data, aes(x = height, y = weight)) +
@@ -132,7 +132,7 @@ ggplot(body_data, aes(x = height, y = weight)) +
   )
 ```
 
-*Height and weight have a direct correlation implying that apart from waist circumference, other body measurements could be considered when explaining differences in weight. The current study takes into account only waist circumference as an objective measure of one’s body.*
+Height and weight have a direct correlation implying that apart from waist circumference, other body measurements could be considered when explaining differences in weight. The current study takes into account only waist circumference as an objective measure of one’s body.
 
 # Discussion
 
